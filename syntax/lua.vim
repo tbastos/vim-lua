@@ -1,7 +1,7 @@
 " Vim syntax file
 " Language:      Lua
 " Maintainer:    Thiago Bastos <https://github.com/tbastos>
-" Last Modified: Fri 25 Sep 2015 17:45:15 CEST
+" Last Modified: Sat 26 Sep 2015 01:13:26 CEST
 " URL:           https://github.com/tbastos/vim-lua
 
 if !exists("main_syntax")
@@ -40,9 +40,10 @@ syntax match luaError "\]"
 syntax match luaError "\<\%(end\|else\|elseif\|then\|until\)\>"
 
 " Comments
-syntax keyword luaTodo    contained TODO FIXME XXX TBD
-syntax match   luaComment "--.*$" contains=luaTodo,@Spell
-syntax region  luaComment matchgroup=luaComment start="--\[\z(=*\)\[" end="\]\z1\]" contains=luaTodo,@Spell fold
+syntax keyword luaCommentTodo contained TODO FIXME XXX TBD
+syntax match   luaComment "--.*$" contains=luaCommentTodo,luaDocTag,@Spell
+syntax region  luaComment matchgroup=luaComment start="--\[\z(=*\)\[" end="\]\z1\]" contains=luaCommentTodo,luaDocTag,@Spell fold
+syntax match   luaDocTag contained "\s@\k\+"
 
 " Function calls
 syntax match luaFuncCall /\k\+\%(\s*[{('"]\)\@=/
@@ -165,25 +166,27 @@ if version >= 508 || !exists("did_javascript_syn_inits")
   else
     command -nargs=+ HiLink hi def link <args>
   endif
-  " HiLink luaParens           Operator
+  HiLink luaParens           Noise
   HiLink luaBraces           Structure
-  " HiLink luaBrackets         Operator
+  HiLink luaBrackets         Noise
   HiLink luaBuiltIn          Special
   HiLink luaComment          Comment
+  HiLink luaCommentTodo      Todo
   HiLink luaCond             Conditional
   HiLink luaConstant         Boolean
+  HiLink luaDocTag           Underlined
   HiLink luaEllipsis         StorageClass
   HiLink luaElse             Conditional
   HiLink luaError            Error
   HiLink luaFloat            Float
   HiLink luaFor              Repeat
   HiLink luaFuncTable        Function
-  " HiLink luaFuncArgName      Constant
+  HiLink luaFuncArgName      Noise
   HiLink luaFuncCall         PreProc
   HiLink luaFuncId           Function
   HiLink luaFuncKeyword      Type
   HiLink luaFuncName         Function
-  " HiLink luaFuncParens       Type
+  HiLink luaFuncParens       Noise
   HiLink luaGotoLabel        Underlined
   HiLink luaIn               Repeat
   HiLink luaLabel            Underlined
@@ -198,7 +201,6 @@ if version >= 508 || !exists("did_javascript_syn_inits")
   HiLink luaStatement        Statement
   HiLink luaString           String
   HiLink luaStringSpecial    SpecialChar
-  HiLink luaTodo             Todo
 
   delcommand HiLink
 end
