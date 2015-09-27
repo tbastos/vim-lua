@@ -13,3 +13,8 @@ Contributing
 
 Contributions are welcome! Please follow the existing code style and in your
 pull request explain the reason for the proposed change and how it is valuable.
+
+Credits
+-------
+
+The indent code was based off [this gist](https://gist.github.com/bonsaiviking/8845871).

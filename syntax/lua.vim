@@ -14,7 +14,7 @@ endif
 syntax sync fromstart
 
 " Clusters
-syntax cluster luaBase contains=luaComment,luaConstant,luaBuiltIn,luaNumber,luaString
+syntax cluster luaBase contains=luaComment,luaCommentLong,luaConstant,luaNumber,luaString,luaStringLong,luaBuiltIn
 syntax cluster luaExpr contains=@luaBase,luaTable,luaParen,luaBracket,luaSpecialTable,luaSpecialValue,luaOperator,luaEllipsis,luaComma,luaFunc,luaFuncCall
 syntax cluster luaStat contains=@luaExpr,luaIfThen,luaBlock,luaRepeat,luaWhile,luaFor,luaGotoLabel,luaLocal,luaStatement,luaSemiCol
 
@@ -40,7 +40,7 @@ syntax match luaError "\<\%(end\|else\|elseif\|then\|until\)\>"
 " Comments
 syntax keyword luaCommentTodo contained TODO FIXME XXX TBD
 syntax match   luaComment "--.*$" contains=luaCommentTodo,luaDocTag,@Spell
-syntax region  luaComment matchgroup=luaComment start="--\[\z(=*\)\[" end="\]\z1\]" contains=luaCommentTodo,luaDocTag,@Spell fold
+syntax region  luaCommentLong matchgroup=luaCommentLongTag start="--\[\z(=*\)\[" end="\]\z1\]" contains=luaCommentTodo,luaDocTag,@Spell fold
 syntax match   luaDocTag contained "\s@\k\+"
 
 " Function calls
@@ -94,7 +94,7 @@ syntax keyword luaStatement break goto return
 
 " Strings
 syntax match  luaStringSpecial contained #\\[\\abfnrtvz'"]\|\\x[[:xdigit:]]\{2}\|\\[[:digit:]]\{,3}#
-syntax region luaString matchgroup=luaStringLong start="\[\z(=*\)\[" end="\]\z1\]" contains=@Spell
+syntax region luaStringLong matchgroup=luaStringLongTag start="\[\z(=*\)\[" end="\]\z1\]" contains=@Spell
 syntax region luaString  start=+'+ end=+'+ skip=+\\\\\|\\'+ contains=luaStringSpecial,@Spell
 syntax region luaString  start=+"+ end=+"+ skip=+\\\\\|\\"+ contains=luaStringSpecial,@Spell
 
@@ -169,6 +169,7 @@ if version >= 508 || !exists("did_lua_syn_inits")
   HiLink luaBrackets         Noise
   HiLink luaBuiltIn          Special
   HiLink luaComment          Comment
+  HiLink luaCommentLong      luaComment
   HiLink luaCommentTodo      Todo
   HiLink luaCond             Conditional
   HiLink luaConstant         Boolean
@@ -197,7 +198,7 @@ if version >= 508 || !exists("did_lua_syn_inits")
   HiLink luaSpecialValue     PreProc
   HiLink luaStatement        Statement
   HiLink luaString           String
-  HiLink luaStringLong       String
+  HiLink luaStringLong       luaString
   HiLink luaStringSpecial    SpecialChar
 
   delcommand HiLink

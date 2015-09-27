@@ -22,12 +22,9 @@ endif
 
 " Variables -----------------------------------------------{{{1
 
-let s:open_patt = '\%(\<\%(function\|if\|repeat\|do\)\>\|(\|{\|\[\)'
+let s:open_patt = '\%(\<\%(function\|if\|repeat\|do\)\>\|(\|{\)'
 let s:middle_patt = '\<\%(else\|elseif\)\>'
-let s:close_patt = '\%(\<\%(end\|until\)\>\|)\|}\|\]\)'
-
-" Regex of syntax group names that are comments or strings.
-let s:comstr_group_patt = 'Comment\|String'
+let s:close_patt = '\%(\<\%(end\|until\)\>\|)\|}\)'
 
 " Expression used to check whether we should skip a match with searchpair().
 let s:skip_expr = "s:IsInCommentOrString(line('.'), col('.'))"
@@ -35,7 +32,8 @@ let s:skip_expr = "s:IsInCommentOrString(line('.'), col('.'))"
 " Auxiliary Functions -------------------------------------{{{1
 
 function s:IsInCommentOrString(lnum, col)
-  return synIDattr(synID(a:lnum, a:col, 1), 'name') =~ s:comstr_group_patt
+  return synIDattr(synID(a:lnum, a:col, 1), 'name') =~ 'luaCommentLong\|luaStringLong'
+        \ && !(getline(a:lnum) =~ '^\s*\%(--\)\?\[=*\[') " opening tag is not considered 'in'
 endfunction
 
 " Find line above 'lnum' that isn't blank, in a comment or string.
@@ -50,8 +48,6 @@ endfunction
 " GetLuaIndent Function -----------------------------------{{{1
 
 function GetLuaIndent()
-  let original_cursor_pos = getpos(".")
-
   " if the line is in a long comment or string, don't change the indent
   if s:IsInCommentOrString(v:lnum, 1)
     return -1
@@ -62,6 +58,8 @@ function GetLuaIndent()
     " this is the first non-empty line
     return 0
   endif
+
+  let original_cursor_pos = getpos(".")
 
   let i = 0
 
