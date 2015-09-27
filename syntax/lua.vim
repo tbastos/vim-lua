@@ -1,8 +1,6 @@
 " Vim syntax file
-" Language:      Lua
-" Maintainer:    Thiago Bastos <https://github.com/tbastos>
-" Last Modified: Sat 26 Sep 2015 01:13:26 CEST
-" URL:           https://github.com/tbastos/vim-lua
+" Language: Lua
+" URL: https://github.com/tbastos/vim-lua
 
 if !exists("main_syntax")
   if version < 600
@@ -96,7 +94,7 @@ syntax keyword luaStatement break goto return
 
 " Strings
 syntax match  luaStringSpecial contained #\\[\\abfnrtvz'"]\|\\x[[:xdigit:]]\{2}\|\\[[:digit:]]\{,3}#
-syntax region luaString matchgroup=luaLongString start="\[\z(=*\)\[" end="\]\z1\]" contains=@Spell
+syntax region luaString matchgroup=luaStringLong start="\[\z(=*\)\[" end="\]\z1\]" contains=@Spell
 syntax region luaString  start=+'+ end=+'+ skip=+\\\\\|\\'+ contains=luaStringSpecial,@Spell
 syntax region luaString  start=+"+ end=+"+ skip=+\\\\\|\\"+ contains=luaStringSpecial,@Spell
 
@@ -159,9 +157,9 @@ syntax keyword luaSpecialValue
 " Define the default highlighting.
 " For version 5.7 and earlier: only when not done already
 " For version 5.8 and later: only when an item doesn't have highlighting yet
-if version >= 508 || !exists("did_javascript_syn_inits")
+if version >= 508 || !exists("did_lua_syn_inits")
   if version < 508
-    let did_javascript_syn_inits = 1
+    let did_lua_syn_inits = 1
     command -nargs=+ HiLink hi link <args>
   else
     command -nargs=+ HiLink hi def link <args>
@@ -187,11 +185,10 @@ if version >= 508 || !exists("did_javascript_syn_inits")
   HiLink luaFuncKeyword      Type
   HiLink luaFuncName         Function
   HiLink luaFuncParens       Noise
-  HiLink luaGotoLabel        Underlined
+  HiLink luaGotoLabel        Noise
   HiLink luaIn               Repeat
-  HiLink luaLabel            Underlined
+  HiLink luaLabel            Label
   HiLink luaLocal            Type
-  HiLink luaLongString       String
   HiLink luaNumber           Number
   HiLink luaOperator         Operator
   HiLink luaRepeat           Repeat
@@ -200,6 +197,7 @@ if version >= 508 || !exists("did_javascript_syn_inits")
   HiLink luaSpecialValue     PreProc
   HiLink luaStatement        Statement
   HiLink luaString           String
+  HiLink luaStringLong       String
   HiLink luaStringSpecial    SpecialChar
 
   delcommand HiLink

@@ -1,7 +1,7 @@
 vim-lua
 =======
 
-Enhanced Lua 5.3 syntax and indent support for Vim.
+Improved Lua 5.3 syntax and indentation support for Vim.
 
 Stock Vim (left) vs. this plugin (right):
 ![](https://raw.github.com/tbastos/i/master/vim-lua-syntax.jpg)
