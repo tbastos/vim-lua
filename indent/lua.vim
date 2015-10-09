@@ -27,7 +27,7 @@ let s:middle_patt = '\<\%(else\|elseif\)\>'
 let s:close_patt = '\%(\<\%(end\|until\)\>\|)\|}\)'
 
 " Expression used to check whether we should skip a match with searchpair().
-let s:skip_expr = "s:IsInCommentOrString(line('.'), col('.'))"
+let s:skip_expr = "synIDattr(synID(line('.'),col('.'),1),'name') =~ 'luaComment\\|luaString'"
 
 " Auxiliary Functions -------------------------------------{{{1
 

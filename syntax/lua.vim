@@ -16,7 +16,7 @@ syntax sync fromstart
 " Clusters
 syntax cluster luaBase contains=luaComment,luaCommentLong,luaConstant,luaNumber,luaString,luaStringLong,luaBuiltIn
 syntax cluster luaExpr contains=@luaBase,luaTable,luaParen,luaBracket,luaSpecialTable,luaSpecialValue,luaOperator,luaEllipsis,luaComma,luaFunc,luaFuncCall
-syntax cluster luaStat contains=@luaExpr,luaIfThen,luaBlock,luaRepeat,luaWhile,luaFor,luaGotoLabel,luaLocal,luaStatement,luaSemiCol
+syntax cluster luaStat contains=@luaExpr,luaIfThen,luaBlock,luaLoop,luaGotoLabel,luaLocal,luaStatement,luaSemiCol
 
 syntax match luaNoise /\%(\.\|,\|:\|\;\)/
 
@@ -72,13 +72,13 @@ syntax keyword luaElse contained else
 syntax region luaBlock transparent matchgroup=luaRepeat start="\<do\>" end="\<end\>" contains=@luaStat fold
 
 " repeat ... until
-syntax region luaRepeat transparent matchgroup=luaRepeat start="\<repeat\>" end="\<until\>" contains=@luaStat fold
+syntax region luaLoop transparent matchgroup=luaRepeat start="\<repeat\>" end="\<until\>" contains=@luaStat nextgroup=@luaExpr fold
 
 " while ... do
-syntax region luaWhile transparent matchgroup=luaRepeat start="\<while\>" end="\<do\>"me=e-2 contains=@luaExpr nextgroup=luaBlock skipwhite skipempty fold
+syntax region luaLoop transparent matchgroup=luaRepeat start="\<while\>" end="\<do\>"me=e-2 contains=@luaExpr nextgroup=luaBlock skipwhite skipempty fold
 
 " for ... do and for ... in ... do
-syntax region luaFor transparent matchgroup=luaRepeat start="\<for\>" end="\<do\>"me=e-2 contains=@luaExpr,luaIn nextgroup=luaBlock skipwhite skipempty
+syntax region luaLoop transparent matchgroup=luaRepeat start="\<for\>" end="\<do\>"me=e-2 contains=@luaExpr,luaIn nextgroup=luaBlock skipwhite skipempty
 syntax keyword luaIn contained in
 
 " goto and labels
@@ -178,7 +178,6 @@ if version >= 508 || !exists("did_lua_syn_inits")
   HiLink luaElse             Conditional
   HiLink luaError            Error
   HiLink luaFloat            Float
-  HiLink luaFor              Repeat
   HiLink luaFuncTable        Function
   HiLink luaFuncArgName      Noise
   HiLink luaFuncCall         PreProc
