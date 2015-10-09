@@ -45,6 +45,12 @@ function s:PrevLineOfCode(lnum)
   return lnum
 endfunction
 
+" Gets line contents, excluding trailing comments.
+function s:GetContents(lnum)
+  echom "Line ".a:lnum.": ".getline(a:lnum)
+  return substitute(getline(a:lnum), '\v\m--.*$', '', '')
+endfunction
+
 " GetLuaIndent Function -----------------------------------{{{1
 
 function GetLuaIndent()
@@ -71,6 +77,12 @@ function GetLuaIndent()
     let i += num_pairs
   endif
 
+  " special case: call(x, y, function() -- should indent only +1
+  if num_pairs > 1 && s:GetContents(prev_line) =~ '\S\+\s*(.*\<function\s*(.*)\s*$'
+    echom "found (function()"
+    let i -= 1
+  endif
+
   " check if current line closes blocks
   call cursor(prev_line, col([prev_line,'$']))
   let num_pairs = searchpair(s:open_patt, s:middle_patt, s:close_patt,
@@ -80,9 +92,10 @@ function GetLuaIndent()
   endif
 
   " if the previous line closed a paren, unindent
+  " special case: end) -- should only unindent once
   call cursor(prev_line - 1, col([prev_line - 1, '$']))
   let num_pairs = searchpair('(', '', ')', 'mr', s:skip_expr, prev_line)
-  if num_pairs > 0
+  if num_pairs > 0 && s:GetContents(prev_line) !~ '\<end\s*)'
     let i -= 1
   endif
 
