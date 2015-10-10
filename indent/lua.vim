@@ -26,6 +26,9 @@ let s:open_patt = '\%(\<\%(function\|if\|repeat\|do\)\>\|(\|{\)'
 let s:middle_patt = '\<\%(else\|elseif\)\>'
 let s:close_patt = '\%(\<\%(end\|until\)\>\|)\|}\)'
 
+let s:anon_func_start = '\S\+\s*[({].*\<function\s*(.*)\s*$'
+let s:anon_func_end = '\<end\%(\s*[)}]\)\+'
+
 " Expression used to check whether we should skip a match with searchpair().
 let s:skip_expr = "synIDattr(synID(line('.'),col('.'),1),'name') =~ 'luaComment\\|luaString'"
 
@@ -47,7 +50,6 @@ endfunction
 
 " Gets line contents, excluding trailing comments.
 function s:GetContents(lnum)
-  echom "Line ".a:lnum.": ".getline(a:lnum)
   return substitute(getline(a:lnum), '\v\m--.*$', '', '')
 endfunction
 
@@ -65,6 +67,9 @@ function GetLuaIndent()
     return 0
   endif
 
+  let contents_cur = s:GetContents(v:lnum)
+  let contents_prev = s:GetContents(prev_line)
+
   let original_cursor_pos = getpos(".")
 
   let i = 0
@@ -77,10 +82,9 @@ function GetLuaIndent()
     let i += num_pairs
   endif
 
-  " special case: call(x, y, function() -- should indent only +1
-  if num_pairs > 1 && s:GetContents(prev_line) =~ '\S\+\s*(.*\<function\s*(.*)\s*$'
-    echom "found (function()"
-    let i -= 1
+  " special case: call(with, {anon = function() -- should indent only once
+  if num_pairs > 1 && contents_prev =~ s:anon_func_start
+    let i = 1
   endif
 
   " check if current line closes blocks
@@ -91,18 +95,22 @@ function GetLuaIndent()
     let i -= num_pairs
   endif
 
-  " if the previous line closed a paren, unindent
-  " special case: end) -- should only unindent once
+  " special case: end}) -- end of call with anon func should unindent once
+  if num_pairs > 1 && contents_cur =~ s:anon_func_end
+    let i = -1
+  endif
+
+  " if the previous line closed a paren, unindent (except with anon funcs)
   call cursor(prev_line - 1, col([prev_line - 1, '$']))
   let num_pairs = searchpair('(', '', ')', 'mr', s:skip_expr, prev_line)
-  if num_pairs > 0 && s:GetContents(prev_line) !~ '\<end\s*)'
+  if num_pairs > 0 && contents_prev !~ s:anon_func_end
     let i -= 1
   endif
 
-  " if this line closed a paren, indent
+  " if this line closed a paren, indent (except with anon funcs)
   call cursor(prev_line, col([prev_line, '$']))
   let num_pairs = searchpair('(', '', ')', 'mr', s:skip_expr, v:lnum)
-  if num_pairs > 0
+  if num_pairs > 0 && contents_cur !~ s:anon_func_end
     let i += 1
   endif
 
