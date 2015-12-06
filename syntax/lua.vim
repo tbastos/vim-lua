@@ -14,9 +14,9 @@ endif
 syntax sync fromstart
 
 " Clusters
-syntax cluster luaBase contains=luaComment,luaCommentLong,luaConstant,luaNumber,luaString,luaStringLong,luaBuiltIn
+syntax cluster luaBase contains=luaComment,luaCommentLong,luaConstant,luaNumber,luaString,luaStringLong,luaBuiltIn,luaError
 syntax cluster luaExpr contains=@luaBase,luaTable,luaParen,luaBracket,luaSpecialTable,luaSpecialValue,luaOperator,luaEllipsis,luaComma,luaFunc,luaFuncCall
-syntax cluster luaStat contains=@luaExpr,luaIfThen,luaBlock,luaLoop,luaLabel,luaGotoLabel,luaLocal,luaStatement,luaSemiCol
+syntax cluster luaStat contains=@luaExpr,luaIfThen,luaBlock,luaLoop,luaGoto,luaLocal,luaStatement,luaSemiCol
 
 syntax match luaNoise /\%(\.\|,\|:\|\;\)/
 
@@ -47,13 +47,13 @@ syntax match   luaDocTag contained "\s@\k\+"
 syntax match luaFuncCall /\k\+\%(\s*[{('"]\)\@=/
 
 " Functions
-syntax region luaFunc transparent matchgroup=luaFuncKeyword start="\<function\>" end="\<end\>" contains=@luaStat,luaFuncSig fold
-syntax match luaFuncSig contained "\(\<function\>\)\@<=[^)]*)" contains=luaFuncId,luaFuncArgs
-syntax match luaFuncId contained "[^(]*(\@=" contains=luaFuncTable,luaFuncName
+syntax region luaFunc transparent start="\<function\>" matchgroup=luaFuncKeyword end="\<end\>" contains=luaFuncKeyword,@luaStat fold
+syntax keyword luaFuncKeyword function contained nextgroup=luaFuncId,luaFuncArgs skipwhite skipempty
+syntax match luaFuncId contained "[a-zA-Z0-9_.: \t\n]\+" contains=luaFuncTable,luaFuncName nextgroup=luaFuncArgs skipwhite skipempty
 syntax match luaFuncTable contained /\k\+\%(\s*[.:]\)\@=/
 syntax match luaFuncName contained "[^(.:]*(\@="
 syntax region luaFuncArgs contained transparent matchgroup=luaFuncParens start=/(/ end=/)/ contains=@luaBase,luaFuncComma,luaEllipsis,luaFuncArgName
-syntax match luaFuncArgName contained /\k*/
+syntax match luaFuncArgName contained /\k\+/
 syntax match  luaEllipsis "\.\.\."
 
 " if ... then
@@ -82,15 +82,16 @@ syntax region luaLoop transparent matchgroup=luaRepeat start="\<for\>" end="\<do
 syntax keyword luaIn contained in
 
 " goto and labels
-syntax match luaGotoLabel "\(\<goto\>\s*\)\@<=\k*"
-syntax match luaLabel "::\k*::"
+syntax keyword luaGoto goto nextgroup=luaGotoLabel skipwhite
+syntax match luaGotoLabel "\k\+" contained
+syntax match luaLabel "::\k\+::"
 
 " Other Keywords
 syntax keyword luaConstant nil true false
 syntax keyword luaBuiltIn _ENV self
 syntax keyword luaLocal local
 syntax keyword luaOperator and or not
-syntax keyword luaStatement break goto return
+syntax keyword luaStatement break return
 
 " Strings
 syntax match  luaStringSpecial contained #\\[\\abfnrtvz'"]\|\\x[[:xdigit:]]\{2}\|\\[[:digit:]]\{,3}#
@@ -185,6 +186,7 @@ if version >= 508 || !exists("did_lua_syn_inits")
   HiLink luaFuncKeyword      Type
   HiLink luaFuncName         Function
   HiLink luaFuncParens       Noise
+  HiLink luaGoto             luaStatement
   HiLink luaGotoLabel        Noise
   HiLink luaIn               Repeat
   HiLink luaLabel            Label
