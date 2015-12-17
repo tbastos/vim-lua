@@ -16,7 +16,7 @@ syntax sync fromstart
 " Clusters
 syntax cluster luaBase contains=luaComment,luaCommentLong,luaConstant,luaNumber,luaString,luaStringLong,luaBuiltIn
 syntax cluster luaExpr contains=@luaBase,luaTable,luaParen,luaBracket,luaSpecialTable,luaSpecialValue,luaOperator,luaEllipsis,luaComma,luaFunc,luaFuncCall,luaError
-syntax cluster luaStat contains=@luaExpr,luaIfThen,luaBlock,luaLoop,luaGoto,luaLocal,luaStatement,luaSemiCol
+syntax cluster luaStat contains=@luaExpr,luaIfThen,luaBlock,luaLoop,luaGoto,luaLabel,luaLocal,luaStatement,luaSemiCol
 
 syntax match luaNoise /\%(\.\|,\|:\|\;\)/
 
