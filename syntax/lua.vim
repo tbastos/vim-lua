@@ -20,9 +20,6 @@ syntax cluster luaStat contains=@luaExpr,luaIfThen,luaBlock,luaLoop,luaGoto,luaL
 
 syntax match luaNoise /\%(\.\|,\|:\|\;\)/
 
-" Shebang at the start
-syntax match luaComment "\%^#!.*"
-
 " Symbols
 syntax region luaTable   transparent matchgroup=luaBraces   start="{" end="}" contains=@luaExpr fold
 syntax region luaParen   transparent matchgroup=luaParens   start='(' end=')' contains=@luaExpr
@@ -37,6 +34,9 @@ syntax match luaError ")"
 syntax match luaError "}"
 syntax match luaError "\]"
 syntax match luaError "\<\%(end\|else\|elseif\|then\|until\)\>"
+
+" Shebang at the start
+syntax match luaComment "\%^#!.*"
 
 " Comments
 syntax keyword luaCommentTodo contained TODO FIXME XXX TBD
