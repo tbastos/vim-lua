@@ -25,7 +25,8 @@ endfunction
 " Clusters
 syntax cluster luaBase contains=luaComment,luaCommentLong,luaConstant,luaNumber,luaString,luaStringLong,luaBuiltIn
 syntax cluster luaExpr contains=@luaBase,luaTable,luaParen,luaBracket,luaSpecialTable,luaSpecialValue,luaOperator,luaSymbolOperator,luaEllipsis,luaComma,luaFunc,luaFuncCall,luaError
-syntax cluster luaStat contains=@luaExpr,luaIfThen,luaBlock,luaLoop,luaGoto,luaLabel,luaLocal,luaStatement,luaSemiCol
+syntax cluster luaStat
+      \ contains=@luaExpr,luaIfThen,luaBlock,luaLoop,luaGoto,luaLabel,luaLocal,luaStatement,luaSemiCol,luaErrHand
 
 syntax match luaNoise /\%(\.\|,\|:\|\;\)/
 
@@ -131,50 +132,60 @@ syntax match luaFloat  "\.\d\+\%([eE][-+]\=\d\+\)\=\>"
 " Floating point constant, without dot, with exponent
 syntax match luaFloat  "\<\d\+[eE][-+]\=\d\+\>"
 
-" Special names from the Standard Library
-syntax keyword luaSpecialTable
-\ bit32
-\ coroutine
-\ debug
-\ io
-\ math
-\ os
-\ package
-\ string
-\ table
-\ utf8
 
-syntax keyword luaSpecialValue
-\ _G
-\ _VERSION
-\ assert
-\ collectgarbage
-\ dofile
-\ error
-\ getfenv
-\ getmetatable
-\ ipairs
-\ load
-\ loadfile
-\ loadstring
-\ module
-\ next
-\ pairs
-\ pcall
-\ print
-\ rawequal
-\ rawget
-\ rawlen
-\ rawset
-\ require
-\ select
-\ setfenv
-\ setmetatable
-\ tonumber
-\ tostring
-\ type
-\ unpack
-\ xpcall
+" Special names from the Standard Library
+if !exists('g:luasyn_nostdlib')
+    syntax keyword luaSpecialValue
+          \ module
+          \ require
+
+    syntax keyword luaSpecialTable _G
+
+    syntax keyword luaErrHand
+          \ assert
+          \ error
+          \ pcall
+          \ xpcall
+
+  if !exists('g:luasyn_noextendedstdlib')
+    syntax keyword luaSpecialTable
+          \ bit32
+          \ coroutine
+          \ debug
+          \ io
+          \ math
+          \ os
+          \ package
+          \ string
+          \ table
+          \ utf8
+
+    syntax keyword luaSpecialValue
+          \ _VERSION
+          \ collectgarbage
+          \ dofile
+          \ getfenv
+          \ getmetatable
+          \ ipairs
+          \ load
+          \ loadfile
+          \ loadstring
+          \ next
+          \ pairs
+          \ print
+          \ rawequal
+          \ rawget
+          \ rawlen
+          \ rawset
+          \ select
+          \ setfenv
+          \ setmetatable
+          \ tonumber
+          \ tostring
+          \ type
+          \ unpack
+  endif
+endif
 
 " Define the default highlighting.
 " For version 5.7 and earlier: only when not done already
@@ -225,6 +236,7 @@ if version >= 508 || !exists("did_lua_syn_inits")
   HiLink luaString           String
   HiLink luaStringLong       luaString
   HiLink luaStringSpecial    SpecialChar
+  HiLink luaErrHand          Exception
 
   delcommand HiLink
 end
