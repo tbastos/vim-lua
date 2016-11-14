@@ -171,21 +171,23 @@ if version >= 508 || !exists("did_lua_syn_inits")
   HiLink luaBrackets         Noise
   HiLink luaBuiltIn          Special
   HiLink luaComment          Comment
+  HiLink luaCommentLongTag   luaCommentLong
   HiLink luaCommentLong      luaComment
   HiLink luaCommentTodo      Todo
   HiLink luaCond             Conditional
-  HiLink luaConstant         Boolean
+  HiLink luaConstant         Constant
   HiLink luaDocTag           Underlined
-  HiLink luaEllipsis         StorageClass
+  HiLink luaEllipsis         Special
   HiLink luaElse             Conditional
   HiLink luaError            Error
   HiLink luaFloat            Float
-  HiLink luaFuncTable        Function
   HiLink luaFuncArgName      Noise
   HiLink luaFuncCall         PreProc
   HiLink luaFuncId           Function
-  HiLink luaFuncKeyword      Type
-  HiLink luaFuncName         Function
+  HiLink luaFuncName         luaFuncId
+  HiLink luaFuncTable        luaFuncId
+  HiLink luaFuncKeyword      luaFunction
+  HiLink luaFunction         Structure
   HiLink luaFuncParens       Noise
   HiLink luaGoto             luaStatement
   HiLink luaGotoLabel        Noise
