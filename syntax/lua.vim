@@ -15,7 +15,7 @@ syntax sync fromstart
 
 " Clusters
 syntax cluster luaBase contains=luaComment,luaCommentLong,luaConstant,luaNumber,luaString,luaStringLong,luaBuiltIn
-syntax cluster luaExpr contains=@luaBase,luaTable,luaParen,luaBracket,luaSpecialTable,luaSpecialValue,luaOperator,luaEllipsis,luaComma,luaFunc,luaFuncCall,luaError
+syntax cluster luaExpr contains=@luaBase,luaTable,luaParen,luaBracket,luaSpecialTable,luaSpecialValue,luaOperator,luaSymbolOperator,luaEllipsis,luaComma,luaFunc,luaFuncCall,luaError
 syntax cluster luaStat contains=@luaExpr,luaIfThen,luaBlock,luaLoop,luaGoto,luaLabel,luaLocal,luaStatement,luaSemiCol
 
 syntax match luaNoise /\%(\.\|,\|:\|\;\)/
@@ -26,7 +26,9 @@ syntax region luaParen   transparent matchgroup=luaParens   start='(' end=')' co
 syntax region luaBracket transparent matchgroup=luaBrackets start="\[" end="\]" contains=@luaExpr
 syntax match  luaComma ","
 syntax match  luaSemiCol ";"
-syntax match  luaOperator "[#<>=~^&|*/%+-]\|\.\."
+if !exists('g:luasyn_nosymboloperator')
+  syntax match luaSymbolOperator "[#<>=~^&|*/%+-]\|\.\."
+endi
 syntax match  luaEllipsis "\.\.\."
 
 " Catch errors caused by unbalanced brackets and keywords
@@ -193,6 +195,7 @@ if version >= 508 || !exists("did_lua_syn_inits")
   HiLink luaLabel            Label
   HiLink luaLocal            Type
   HiLink luaNumber           Number
+  HiLink luaSymbolOperator   luaOperator
   HiLink luaOperator         Operator
   HiLink luaRepeat           Repeat
   HiLink luaSemiCol          Delimiter
