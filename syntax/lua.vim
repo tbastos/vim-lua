@@ -15,8 +15,8 @@ syntax sync fromstart
 
 function! s:FoldableRegion(tag, name, expr)
   let synexpr = 'syntax region ' . a:name . ' ' . a:expr
-  let pfx = 'g:luasyn_fold_'
-  if !exists('g:luasyn_nofold') || exists(pfx . a:tag) || exists(pfx . a:name)
+  let pfx = 'g:lua_syntax_fold_'
+  if !exists('g:lua_syntax_nofold') || exists(pfx . a:tag) || exists(pfx . a:name)
     let synexpr .= ' fold'
   end
   exec synexpr
@@ -37,7 +37,7 @@ syntax region luaParen   transparent matchgroup=luaParens   start='(' end=')' co
 syntax region luaBracket transparent matchgroup=luaBrackets start="\[" end="\]" contains=@luaExpr
 syntax match  luaComma ","
 syntax match  luaSemiCol ";"
-if !exists('g:luasyn_nosymboloperator')
+if !exists('g:lua_syntax_nosymboloperator')
   syntax match luaSymbolOperator "[#<>=~^&|*/%+-]\|\.\."
 endi
 syntax match  luaEllipsis "\.\.\."
@@ -134,7 +134,7 @@ syntax match luaFloat  "\<\d\+[eE][-+]\=\d\+\>"
 
 
 " Special names from the Standard Library
-if !exists('g:luasyn_nostdlib')
+if !exists('g:lua_syntax_nostdlib')
     syntax keyword luaSpecialValue
           \ module
           \ require
@@ -147,7 +147,7 @@ if !exists('g:luasyn_nostdlib')
           \ pcall
           \ xpcall
 
-  if !exists('g:luasyn_noextendedstdlib')
+  if !exists('g:lua_syntax_noextendedstdlib')
     syntax keyword luaSpecialTable
           \ bit32
           \ coroutine
