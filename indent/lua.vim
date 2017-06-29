@@ -22,9 +22,9 @@ endif
 
 " Variables -----------------------------------------------{{{1
 
-let s:open_patt = '\%(\<\%(function\|if\|repeat\|do\)\>\|(\|{\)'
-let s:middle_patt = '\<\%(else\|elseif\)\>'
-let s:close_patt = '\%(\<\%(end\|until\)\>\|)\|}\)'
+let s:open_patt = '\C\%(\<\%(function\|if\|repeat\|do\)\>\|(\|{\)'
+let s:middle_patt = '\C\<\%(else\|elseif\)\>'
+let s:close_patt = '\C\%(\<\%(end\|until\)\>\|)\|}\)'
 
 let s:anon_func_start = '\S\+\s*[({].*\<function\s*(.*)\s*$'
 let s:anon_func_end = '\<end\%(\s*[)}]\)\+'
