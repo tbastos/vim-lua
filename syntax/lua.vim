@@ -24,7 +24,7 @@ endfunction
 
 " Clusters
 syntax cluster luaBase contains=luaComment,luaCommentLong,luaConstant,luaNumber,luaString,luaStringLong,luaBuiltIn
-syntax cluster luaExpr contains=@luaBase,luaTable,luaParen,luaBracket,luaSpecialTable,luaSpecialValue,luaOperator,luaSymbolOperator,luaEllipsis,luaComma,luaFunc,luaFuncCall,luaError
+syntax cluster luaExpr contains=@luaBase,luaTable,luaParen,luaBracket,luaSpecialTable,luaSpecialValue,luaOperator,luaSymbolOperator,luaEllipsis,luaComma,luaFunc,luaFuncCall,luaError,luaVar
 syntax cluster luaStat
       \ contains=@luaExpr,luaIfThen,luaBlock,luaLoop,luaGoto,luaLabel,luaLocal,luaStatement,luaSemiCol,luaErrHand
 
@@ -57,6 +57,9 @@ syntax match   luaComment "--.*$" contains=luaCommentTodo,luaDocTag,@Spell
 call s:FoldableRegion('comment', 'luaCommentLong',
       \ 'matchgroup=luaCommentLongTag start="--\[\z(=*\)\[" end="\]\z1\]" contains=luaCommentTodo,luaDocTag,@Spell')
 syntax match   luaDocTag contained "\s@\k\+"
+
+" Variable
+syntax match luaVar /\<\K\k*/
 
 " Function calls
 syntax match luaFuncCall /\k\+\%(\s*[{('"]\)\@=/
