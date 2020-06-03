@@ -18,6 +18,8 @@ keep it disabled).
 - `g:lua_syntax_nosymboloperator` disables highlighting of the Lua symbol
   operators (that is, all operators except for the keyword operators and and
   or).
+- `g:lua_syntax_fancynotequal` enables displaying Lua's `~=` operator with
+  Unicode character `≠`.
 - `g:lua_syntax_nofold` disables code folding. If this option is set, you can
   selectively reenable some folds with `g:lua_syntax_fold_<group>` where
   `<group>` can be table, comment, function, control or string. You can also
