@@ -120,6 +120,11 @@ function GetLuaIndent()
     let i = -1
   endif
 
+  " special case: end}) -- line after end of call w/ anon func should outdent again
+  if i >= 0 && contents_prev =~# s:anon_func_end
+    let i -= 1
+  endif
+
   " restore cursor
   call setpos(".", original_cursor_pos)
 

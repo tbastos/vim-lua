@@ -1,0 +1,53 @@
+Before:
+  setlocal expandtab shiftwidth=4 tabstop=4
+
+Given lua (chained functions):
+  if true then
+      local data = self.kitchen
+          :getCheese()
+          :enjoyCheese(self
+          :getHead()
+          :getMouth())
+          end
+
+Do (reindent):
+  gg=G
+
+Expect lua (indented chained functions):
+  if true then
+      local data = self.kitchen
+          :getCheese()
+          :enjoyCheese(self
+              :getHead()
+              :getMouth())
+  end
+
+Given lua (chained anonymous function arguments):
+  if false then
+  local data = self.kitchen
+      :eatCheese({fn = function()
+          return 10
+      end})
+          :digestCheese(function()
+              return 1
+          end)
+
+          self:Func()
+      end
+
+Do (reindent):
+  gg=G
+
+Expect lua (indented chained anonymous function arguments):
+  if false then
+      local data = self.kitchen
+          :eatCheese({fn = function()
+              return 10
+          end})
+          :digestCheese(function()
+              return 1
+          end)
+
+      self:Func()
+  end
+
