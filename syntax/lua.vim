@@ -28,7 +28,7 @@ function! s:FoldableRegion(tag, name, expr)
 endfunction
 
 " Clusters
-syntax cluster luaBase contains=luaComment,luaCommentLong,luaConstant,luaNumber,luaString,luaStringLong,luaBuiltIn
+syntax cluster luaBase contains=luaComment,luaCommentLong,luaConstant,luaBoolean,luaNumber,luaFloat,luaString,luaStringLong,luaBuiltIn
 syntax cluster luaExpr contains=@luaBase,luaTable,luaParen,luaBracket,luaSpecialTable,luaSpecialValue,luaOperator,luaSymbolOperator,luaEllipsis,luaComma,luaFunc,luaFuncCall,luaError
 syntax cluster luaStat
       \ contains=@luaExpr,luaIfThen,luaBlock,luaLoop,luaGoto,luaLabel,luaLocal,luaStatement,luaSemiCol,luaErrHand
@@ -117,7 +117,8 @@ syntax match luaGotoLabel "\k\+" contained
 syntax match luaLabel "::\k\+::"
 
 " Other Keywords
-syntax keyword luaConstant nil true false
+syntax keyword luaConstant nil
+syntax keyword luaBoolean true false
 syntax keyword luaBuiltIn _ENV self
 syntax keyword luaLocal local
 syntax keyword luaOperator and or not
@@ -216,6 +217,7 @@ if version >= 508 || !exists("did_lua_syn_inits")
   HiLink luaCommentTodo      Todo
   HiLink luaCond             Conditional
   HiLink luaConstant         Constant
+  HiLink luaBoolean          Boolean
   HiLink luaDocTag           Underlined
   HiLink luaEllipsis         Special
   HiLink luaElse             Conditional
