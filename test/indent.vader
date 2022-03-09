@@ -51,3 +51,68 @@ Expect lua (indented chained anonymous function arguments):
       self:Func()
   end
 
+
+Given lua (anonymous function as third argument):
+  local p = self.input:getActiveControls(
+    5,
+    10,
+    function(value)
+          local name_remap = {
+              axis = {
+                  left = "Left Stick",
+              },
+          }
+          return name_remap[value] or value
+      end)
+  print(p)
+
+
+Do (reindent):
+  gg=G
+
+Expect lua (function begin/end line up and body indents):
+  local p = self.input:getActiveControls(
+      5,
+      10,
+      function(value)
+          local name_remap = {
+              axis = {
+                  left = "Left Stick",
+              },
+          }
+          return name_remap[value] or value
+      end)
+  print(p)
+
+
+Do (put first arg on call line, reindent):
+  ggJx=G
+
+Expect lua (function indent matches first newline argument):
+  local p = self.input:getActiveControls(5,
+      10,
+      function(value)
+          local name_remap = {
+              axis = {
+                  left = "Left Stick",
+              },
+          }
+          return name_remap[value] or value
+      end)
+  print(p)
+
+
+Do (put all args on one line, reindent):
+  ggJx3J=G
+
+Expect lua (function indent combines with parens indent):
+  local p = self.input:getActiveControls(5, 10, function(value)
+      local name_remap = {
+          axis = {
+              left = "Left Stick",
+          },
+      }
+      return name_remap[value] or value
+  end)
+  print(p)
+
