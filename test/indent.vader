@@ -1,0 +1,118 @@
+Before:
+  setlocal expandtab shiftwidth=4 tabstop=4
+
+Given lua (chained functions):
+  if true then
+      local data = self.kitchen
+          :getCheese()
+          :enjoyCheese(self
+          :getHead()
+          :getMouth())
+          end
+
+Do (reindent):
+  gg=G
+
+Expect lua (indented chained functions):
+  if true then
+      local data = self.kitchen
+          :getCheese()
+          :enjoyCheese(self
+              :getHead()
+              :getMouth())
+  end
+
+Given lua (chained anonymous function arguments):
+  if false then
+  local data = self.kitchen
+      :eatCheese({fn = function()
+          return 10
+      end})
+          :digestCheese(function()
+              return 1
+          end)
+
+          self:Func()
+      end
+
+Do (reindent):
+  gg=G
+
+Expect lua (indented chained anonymous function arguments):
+  if false then
+      local data = self.kitchen
+          :eatCheese({fn = function()
+              return 10
+          end})
+          :digestCheese(function()
+              return 1
+          end)
+
+      self:Func()
+  end
+
+
+Given lua (anonymous function as third argument):
+  local p = self.input:getActiveControls(
+    5,
+    10,
+    function(value)
+          local name_remap = {
+              axis = {
+                  left = "Left Stick",
+              },
+          }
+          return name_remap[value] or value
+      end)
+  print(p)
+
+
+Do (reindent):
+  gg=G
+
+Expect lua (function begin/end line up and body indents):
+  local p = self.input:getActiveControls(
+      5,
+      10,
+      function(value)
+          local name_remap = {
+              axis = {
+                  left = "Left Stick",
+              },
+          }
+          return name_remap[value] or value
+      end)
+  print(p)
+
+
+Do (put first arg on call line, reindent):
+  ggJx=G
+
+Expect lua (function indent matches first newline argument):
+  local p = self.input:getActiveControls(5,
+      10,
+      function(value)
+          local name_remap = {
+              axis = {
+                  left = "Left Stick",
+              },
+          }
+          return name_remap[value] or value
+      end)
+  print(p)
+
+
+Do (put all args on one line, reindent):
+  ggJx3J=G
+
+Expect lua (function indent combines with parens indent):
+  local p = self.input:getActiveControls(5, 10, function(value)
+      local name_remap = {
+          axis = {
+              left = "Left Stick",
+          },
+      }
+      return name_remap[value] or value
+  end)
+  print(p)
+
